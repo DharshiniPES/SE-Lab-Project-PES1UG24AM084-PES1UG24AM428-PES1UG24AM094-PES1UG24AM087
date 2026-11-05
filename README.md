@@ -1,5 +1,5 @@
 # Digital Campus Library Reservation Gateway (LRG)
-## Software Engineering Mini-Project — Collaborative Team Repository
+## Software Engineering Mini-Project - Consolidated Team Repository
 
 [![CI Quality Gate](https://github.com/DharshiniPES/SE-Lab-Project-PES1UG24AM084-PES1UG24AM428-PES1UG24AM094-PES1UG24AM087/actions/workflows/ci.yml/badge.svg)](https://github.com/DharshiniPES/SE-Lab-Project-PES1UG24AM084-PES1UG24AM428-PES1UG24AM094-PES1UG24AM087/actions)
 ![Tests](https://img.shields.io/badge/tests-88%2F88%20passing-brightgreen)
@@ -8,75 +8,155 @@
 ![WCAG](https://img.shields.io/badge/accessibility-WCAG%202.1%20AA-blue)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 
-Comprehensive collaborative repository for the **Software Engineering Lab Project**, Department of Computer Science & Engineering, **PES University**.
+Consolidated collaborative repository for the **Software Engineering Mini-Project**, Department of Computer Science and Engineering, **PES University**.
 
 ---
 
-## 👥 Team Members & Project Roles
+## 1. Project Team Members and Use Case Allocation
 
-| Student Name | SRN | Primary Role | Assigned Use Case / Subsystem |
+| Student Name | SRN | Role | Assigned Use Case / System Domain |
 | :--- | :--- | :--- | :--- |
-| **Dharshini V** | **PES1UG24AM428** | Dev Lead & Full-Stack Architect | **UC-04: Pay Overdue Fine & Settlement** |
-| **Dhareen G** | **PES1UG24AM084** | QA Lead & Scrum Master | **UC-06 / UC-07: Return Processing & Notifications** |
-| **Divyansh** | **PES1UG24AM094** | Backend & Search Engineer | **UC-01 / UC-02: Catalog Search & Discovery** |
-| **Dhruv Talavat**| **PES1UG24AM087** | Database & Security Engineer | **UC-03: Hold Placement & Rate Limiting** |
+| **Dharshini V** | **PES1UG24AM428** | Dev Lead and Full-Stack Architect | **UC-04b: Pay Overdue Fine & Settle Dues**, UC-03 Hold Gatekeeper, Full-Stack Architecture |
+| **Dhareen G** | **PES1UG24AM084** | QA Lead and Scrum Master | **UC-01: Search ISBN Catalog**, **UC-06: Return Title & Availability**, **UC-07: Notifications** |
+| **Divyansh** | **PES1UG24AM094** | Backend and Analytics Lead | **UC-01: Search ISBN Catalog**, **UC-08: Manage Catalog Entries**, **UC-09: Hold Demand Report** |
+| **Dhruv Talavat** | **PES1UG24AM087** | Database and Security Lead | **UC-02: View Book Details**, **UC-03: Place Hold Request**, **UC-04: View & Cancel Holds** |
 
 ---
 
-## 🚀 All Three Project Deliverables Summary
+## 2. Project Deliverables Summary
 
-Strictly maintained in **this single GitHub repository** as required by the course coordinator:
+All three course deliverables are maintained in this single repository:
 
-### 1. Deliverable 1: Requirements, UML, Jira & Architecture (Labs 1–4)
-- **Lab 1**: Requirements Engineering, Functional/Non-Functional Specifications, and UML Use Case Modeling.
-- **Lab 2**: Jira Agile Backlog, Fibonacci Story Points, and Sprint Execution.
-- **Lab 3**: UML Component Architecture, Provided/Required Interfaces, and Architectural Decision Records (ADRs).
-- **Lab 4**: Software Requirements Specification (`SRS`), Software Architecture & Design (`SAD`), and Software Test Plan (`STP`).
-  - [`Lab-04-SRS-SAD-STP/SRS_Library_Reservation_Gateway (1).pdf`](file:///Lab-04-SRS-SAD-STP/SRS_Library_Reservation_Gateway%20(1).pdf)
-  - [`Lab-04-SRS-SAD-STP/SAD_Library_Reservation_Gateway (1).pdf`](file:///Lab-04-SRS-SAD-STP/SAD_Library_Reservation_Gateway%20(1).pdf)
-  - [`Lab-04-SRS-SAD-STP/Test_Plan_Library_Reservation_Gateway.docx`](file:///Lab-04-SRS-SAD-STP/Test_Plan_Library_Reservation_Gateway.docx) *(Updated to v2.0)*
+### Deliverable 1: System Specifications and Architecture (`Lab-04-SRS-SAD-STP/`)
+Foundational software engineering documentation for the Digital Campus Library Reservation Gateway:
+- **Software Requirements Specification (SRS)**: [`Lab-04-SRS-SAD-STP/SRS_Library_Reservation_Gateway (1).pdf`](file:///Lab-04-SRS-SAD-STP/SRS_Library_Reservation_Gateway%20(1).pdf)
+  - Complete functional requirements (`LRG-F-001` to `LRG-F-052`), non-functional requirements (`LRG-NF-001` to `LRG-NF-007`), security specifications (`LRG-SR-001` to `LRG-SR-007`), UML use-case models, and Requirements Traceability Matrix (RTM).
+- **Software Architecture and Design (SAD)**: [`Lab-04-SRS-SAD-STP/SAD_Library_Reservation_Gateway (1).pdf`](file:///Lab-04-SRS-SAD-STP/SAD_Library_Reservation_Gateway%20(1).pdf)
+  - Layered modular architecture, provided and required component interfaces, sequence diagrams, REST API schemas, and STRIDE threat modeling.
+- **Software Test Plan (STP v2.0 - Post-Sprint Updated)**: [`Lab-04-SRS-SAD-STP/Test_Plan_Library_Reservation_Gateway.docx`](file:///Lab-04-SRS-SAD-STP/Test_Plan_Library_Reservation_Gateway.docx)
+  - Post-sprint updated test strategy, entry and exit criteria, updated test catalogue for all 10 use cases, and 100% accepted RTM.
 
-### 2. Deliverable 2: Software Implementation & Sprints 1, 2, and 3
-- Working modular web application built with **Python / Flask** and **SQLite** (relational engine with foreign key enforcement and transactional integrity):
-  - **`src/catalog_search.py`**: Search across 100,000 titles by ISBN, title, or author; pagination (10/page); book detail view; hyphen-flexible ISBN normalization (`TC-SRCH-07`).
-  - **`src/auth.py`**: Campus OpenID Connect SSO authentication; 30-minute idle session timeout; 5-attempt brute-force lockout for 15 minutes (`LRG-SR-005`).
-  - **`src/reservation_manager.py`**: FIFO hold queue placement; 5-hold limit; Available title rejection; 72-hour auto-expiration worker with cascade queue promotion (`TC-HOLD-06`).
-  - **`src/fine_manager.py`**: **UC-04: Pay Overdue Fine**; overdue balance calculation; payment processing via Campus Wallet / UPI; digital receipt issuance; automated hold restrictions.
-  - **`src/notification.py`**: Hold-ready notices (72h pickup window); 24h expiration reminders; 3-attempt exponential retry on SMTP downtime.
-  - **`src/admin.py`**: Librarian administration center; title return processing; hold demand rankings; book addition/editing; strict RBAC.
-  - **`src/security.py`**: Sliding-window rate limiter (60 req/min); SQL injection & XSS sanitization; password non-storage enforcement.
-  - **`src/templates/` & `src/static/`**: High-contrast, mobile-responsive web UI meeting **WCAG 2.1 AA** standards from 360px viewport width up.
+### Deliverable 2: Software Implementation (`src/`)
+Production-grade modular web application built with **Python 3.11 / Flask** and **SQLite** (foreign keys enforced with ACID transactions):
+- **`src/catalog_search.py`**: Search across 100,000 titles by ISBN, title, or author; pagination (10/page); book detail view; hyphen-flexible ISBN normalization (`TC-SRCH-07`).
+- **`src/auth.py`**: Campus OpenID Connect SSO authentication; 30-minute idle session timeout; 5-attempt brute-force lockout for 15 minutes (`LRG-SR-005`).
+- **`src/reservation_manager.py`**: FIFO hold queue placement; 5-hold limit; Available title rejection; 72-hour auto-expiration worker with cascade queue promotion (`TC-HOLD-06`).
+- **`src/fine_manager.py`**: **UC-04b: Pay Overdue Fine & Settle Dues**; daily overdue balance calculation ($1/day); payment processing via Campus Wallet and UPI; digital receipt issuance; automated hold restrictions.
+- **`src/notification.py`**: Hold-ready notices (72h pickup window); 24h expiration reminders; 3-attempt exponential backoff retry on SMTP downtime.
+- **`src/admin.py`**: Librarian administration center; title return processing; hold demand rankings; book addition and editing; strict RBAC.
+- **`src/security.py`**: Sliding-window rate limiter (60 req/min); SQL injection and XSS sanitization; password non-storage enforcement.
+- **`src/database.py`**: Relational schema, SQLite transactional connection manager, and catalog seed data.
+- **`src/templates/` and `src/static/`**: High-contrast, mobile-responsive web UI meeting **WCAG 2.1 AA** standards from 360px viewport width up.
 
-### 3. Deliverable 3: Complete Testing & Generated Reports (`docs/`)
+### Deliverable 3: Quality Assurance, Verification and Sprint Tracking (`docs/`)
 All four formal test reports executed during the testing window (**2nd Nov to 6th Nov 2026**):
 
-| Deliverable Item | Document Link | Description & Key Results |
+| Deliverable Item | Document Reference | Scope and Results |
 | :--- | :--- | :--- |
-| **1. Updated Test Cases** | [`docs/Updated_Test_Case_Document.md`](file:///docs/Updated_Test_Case_Document.md) | Details test case changes across Sprints 1–3, adding fine settlement, 72h auto-expire cascade, and updated RTM. |
-| **2.i. Unit Test Report** | [`docs/Unit_Test_Report.md`](file:///docs/Unit_Test_Report.md) | 88 unit and integration tests executed across all 10 use cases across all classes; **100% pass rate**; 0 open defects. |
-| **2.ii. System Validation Report** | [`docs/System_Validation_Report.md`](file:///docs/System_Validation_Report.md) | End-to-end flows for UC-01 to UC-09 + UC-04; NFR validation ($P_{90} < 0.006\text{ s}$); 100% RTM acceptance (`A`). |
-| **2.iii. Code Coverage Report** | [`docs/Code_Coverage_Report.md`](file:///docs/Code_Coverage_Report.md) | **89% overall statement coverage**; **93.8% business-layer coverage** (exceeds 70% threshold in `LRG-NF-006`). |
-| **2.iv. Branch Coverage Report** | [`docs/Branch_Coverage_Report.md`](file:///docs/Branch_Coverage_Report.md) | **82.6% branch coverage** across 270 decision points; evaluates all boundary paths and error gates. |
-| **Executive Summary** | [`docs/Test_Summary_Report.md`](file:///docs/Test_Summary_Report.md) | High-level executive test summary, defect aging, and formal quality gate sign-off. |
-| **Sprint-3 & Jira Report** | [`docs/Sprint_3_Report_and_Jira_Tracking.md`](file:///docs/Sprint_3_Report_and_Jira_Tracking.md) | Agile tracking, epics, Fibonacci story points, 100% burndown chart, and CI/CD integration. |
+| **Updated Test Cases** | [`docs/Updated_Test_Case_Document.md`](file:///docs/Updated_Test_Case_Document.md) | Granular post-sprint changes for all 10 use cases, baseline comparisons, and updated test cases. |
+| **Unit Test Report** | [`docs/Unit_Test_Report.md`](file:///docs/Unit_Test_Report.md) | 88 automated unit and integration tests itemized by use case; **100% pass rate**; 0 open defects. |
+| **System Validation Report** | [`docs/System_Validation_Report.md`](file:///docs/System_Validation_Report.md) | Multi-tier E2E validation for all 10 use cases, NFR latency benchmarks (0.0051s), WCAG compliance, STRIDE matrix. |
+| **Code Coverage Report** | [`docs/Code_Coverage_Report.md`](file:///docs/Code_Coverage_Report.md) | **89% overall statement coverage**; **93.8% business-layer coverage** (surpassing 70% requirement). |
+| **Branch Coverage Report** | [`docs/Branch_Coverage_Report.md`](file:///docs/Branch_Coverage_Report.md) | **82.6% branch coverage** across 270 decision points; verifies all boundary conditions and error branches. |
+| **Executive Test Summary** | [`docs/Test_Summary_Report.md`](file:///docs/Test_Summary_Report.md) | Executive summary and formal sign-offs across all 4 team members. |
+| **Sprint-3 and Jira Report** | [`docs/Sprint_3_Report_and_Jira_Tracking.md`](file:///docs/Sprint_3_Report_and_Jira_Tracking.md) | Agile tracking, user stories, Fibonacci story points (85 pts total), 100% completed burndown chart. |
+| **Test Plan Word Document** | [`docs/Test_Plan_Library_Reservation_Gateway_v2.0.docx`](file:///docs/Test_Plan_Library_Reservation_Gateway_v2.0.docx) | Official formatted Microsoft Word STP v2.0 document. |
 
 ---
 
-## 🛠️ Quick Start & Local Execution
+## 3. Git Architecture and Branching Model
 
-### 1. Setup Environment & Install Dependencies
+This repository is organized strictly for the consolidated project:
+
+```
++-----------------------------------------------------------------------------------------+
+|                                    GIT BRANCHING MODEL                                  |
+|                                                                                         |
+|   [feature/sprint branches]  --->  [PES1UG24AM428]  --->  [PR / CI Gate]  --->  [main]  |
+|                                                                                         |
+|   - main: Stable production release branch containing verified deliverables             |
+|   - PES1UG24AM428: Active developer tracking branch for Dharshini V (Dev Lead)          |
+|   - CI/CD Actions: Triggers on PR and push to validate all 88 tests and coverage >= 70% |
++-----------------------------------------------------------------------------------------+
+```
+
+### Git Directory Structure
+
+```text
+SE-Lab-Project/
+|-- .github/
+|   `-- workflows/
+|       `-- ci.yml                               # Automated GitHub Actions CI/CD pipeline
+|-- Lab-04-SRS-SAD-STP/                          # Deliverable 1: Core Project Specifications
+|   |-- SRS_Library_Reservation_Gateway (1).pdf  # Software Requirements Specification
+|   |-- SAD_Library_Reservation_Gateway (1).pdf  # Software Architecture & Design Document
+|   |-- Test_Plan_Library_Reservation_Gateway.docx # Software Test Plan v2.0
+|   `-- readme.md
+|-- docs/                                        # Deliverable 3: Test Reports & Quality Assurance
+|   |-- Unit_Test_Report.md                      # 88 Unit tests itemized by use case
+|   |-- System_Validation_Report.md              # E2E validation traces across all 10 use cases
+|   |-- Code_Coverage_Report.md                  # 89% statement coverage analysis
+|   |-- Branch_Coverage_Report.md                # 82.6% branch coverage across 270 branches
+|   |-- Test_Summary_Report.md                   # Executive testing summary & team approvals
+|   |-- Updated_Test_Case_Document.md            # Post-sprint test case catalogue
+|   |-- Test_Plan_Library_Reservation_Gateway_v2.0.docx # Formatted Word STP v2.0
+|   |-- Sprint_3_Report_and_Jira_Tracking.md     # Sprints 1-3 Jira tracking & burndown chart
+|   |-- coverage.xml                             # Machine-readable Cobertura XML report
+|   `-- coverage_html/                           # Interactive HTML code coverage site
+|-- src/                                         # Deliverable 2: Software Implementation
+|   |-- __init__.py
+|   |-- app.py                                   # Flask REST API and UI router
+|   |-- admin.py                                 # Head Librarian administration & RBAC
+|   |-- audit.py                                 # Immutable audit logging (1-year retention)
+|   |-- auth.py                                  # Campus SSO, idle expiry & lockout
+|   |-- catalog_search.py                        # ISBN search, pagination & normalization
+|   |-- database.py                              # SQLite relational schema & seeds
+|   |-- fine_manager.py                          # UC-04b: Overdue fine calculation & payment
+|   |-- notification.py                          # Hold-ready email & exponential retry queue
+|   |-- reservation_manager.py                   # FIFO hold queue & 72h auto-expire cascade
+|   |-- security.py                              # Sliding-window rate limiter & sanitization
+|   |-- templates/                               # WCAG 2.1 AA accessible HTML templates
+|   `-- static/                                  # Responsive stylesheets and client scripts
+|-- tests/                                       # Automated Test Suites (88 Tests Passing)
+|   |-- conftest.py                              # Pytest fixtures & isolated in-memory DB
+|   |-- test_all_use_cases.py                    # 27 dedicated tests directly validating UC-01 to UC-09
+|   |-- test_admin.py                            # TC-ADM tests
+|   |-- test_app_routes.py                       # HTTP routes & web view integration tests
+|   |-- test_auth.py                             # TC-AUTH tests
+|   |-- test_catalog_search.py                   # TC-SRCH tests
+|   |-- test_fine_manager.py                     # TC-FINE tests (UC-04b)
+|   |-- test_notification.py                     # TC-NOTF tests
+|   |-- test_reservation_manager.py              # TC-HOLD tests
+|   |-- test_security_audit.py                   # TC-SEC and TC-AUD tests
+|   |-- test_system_e2e.py                       # Multi-stage end-to-end system flows
+|   `-- test_coverage_boost.py                   # Edge-case decision branch tests
+|-- scripts/
+|   |-- run_all_tests.py                         # Automated test execution script
+|   |-- seed_data.py                             # Relational database seeding script
+|   `-- generate_docx_test_plan.py               # Word document generation script
+|-- .gitignore
+|-- pytest.ini
+|-- requirements.txt
+`-- README.md
+```
+
+---
+
+## 4. Local Quick Start Instructions
+
+### 1. Clone the Repository and Install Dependencies
 ```bash
 git clone https://github.com/DharshiniPES/SE-Lab-Project-PES1UG24AM084-PES1UG24AM428-PES1UG24AM094-PES1UG24AM087.git
-cd SE-Lab-Project-PES1UG24AM084-PES1UG24AM428-PES1UG24AM094-PES1UG24AM087-
+cd SE-Lab-Project-PES1UG24AM084-PES1UG24AM428-PES1UG24AM094-PES1UG24AM087
 pip install -r requirements.txt
 ```
 
-### 2. Execute Automated Test Suite & Generate Reports
+### 2. Run the Automated Test Suite and Check Coverage
 ```bash
-# Run all 88 tests with statement and branch coverage
+# Execute all 88 tests with statement and branch coverage
 pytest --cov=src --cov-branch --cov-report=term-missing --cov-report=html:docs/coverage_html --cov-report=xml:docs/coverage.xml
 
-# Or run via automated test script
+# Alternatively, run via the automated script
 python scripts/run_all_tests.py
 ```
 
@@ -84,80 +164,29 @@ python scripts/run_all_tests.py
 ```bash
 python -m src.app
 ```
-Navigate your browser to **`http://localhost:5000`** to access:
+Open a browser and navigate to `http://localhost:5000`:
 - **Catalog Search**: `/`
-- **Book Details & Hold Placement**: `/book/<isbn>`
+- **Book Details and Hold Placement**: `/book/<isbn>`
 - **My Active Holds**: `/my-holds`
-- **Overdue Fines & Payment Desk (UC-04)**: `/fines`
-- **Head Librarian Administration**: `/admin/dashboard`
+- **Overdue Fines and Payment Desk (UC-04b)**: `/fines`
+- **Head Librarian Administration**: `/admin`
 - **Campus SSO Login**: `/login`
-- **System Health & Availability**: `/health`
+- **System Health Endpoint**: `/health`
 
 ---
 
-## 🔄 CI/CD Pipeline (GitHub Actions)
+## 5. Continuous Integration (CI/CD) Pipeline
 
 Configured at [`.github/workflows/ci.yml`](file:///.github/workflows/ci.yml):
 - **Triggers**: On every `push` and `pull_request` to `main` and teammate branches.
-- **Stages**: Environment Provisioning $\to$ Syntax Check $\to$ Unit Tests $\to$ System Validation $\to$ Coverage Threshold Gating ($\ge 70\%$) $\to$ HTML/XML Report Archiving.
+- **Pipeline Stages**:
+  1. Environment Provisioning & Dependency Caching
+  2. Code Linting & Syntax Verification
+  3. Hermetic Unit Test Execution
+  4. End-to-End System Validation
+  5. Code Coverage Threshold Gating ($\ge 70\%$)
+  6. Artifact Archiving (HTML and XML coverage reports)
 
 ---
 
-## 📂 Repository Directory Structure
-
-```text
-SE-Lab-Project/
-├── .github/
-│   └── workflows/
-│       └── ci.yml                     <-- Automated CI/CD pipeline
-├── docs/
-│   ├── Unit_Test_Report.md            <-- Deliverable 2.b.i
-│   ├── System_Validation_Report.md    <-- Deliverable 2.b.ii
-│   ├── Code_Coverage_Report.md        <-- Deliverable 2.b.iii
-│   ├── Branch_Coverage_Report.md      <-- Deliverable 2.b.iv
-│   ├── Test_Summary_Report.md         <-- Executive Testing Summary
-│   ├── Updated_Test_Case_Document.md  <-- Deliverable 1.a & 1.b
-│   ├── Test_Plan_Library_Reservation_Gateway_v2.0.docx
-│   ├── Sprint_3_Report_and_Jira_Tracking.md <-- Deliverable 3.a & 3.b
-│   ├── coverage_html/                 <-- Interactive HTML code coverage
-│   └── coverage.xml                   <-- Machine-readable Cobertura XML
-├── src/
-│   ├── __init__.py
-│   ├── app.py                         <-- Flask REST Gateway & UI router
-│   ├── admin.py                       <-- Librarian Admin & RBAC
-│   ├── audit.py                       <-- Immutable audit logging (1 yr)
-│   ├── auth.py                        <-- Campus SSO & lockout (LRG-F-010)
-│   ├── catalog_search.py              <-- Catalog queries & pagination
-│   ├── database.py                    <-- SQLite relational schema & seeds
-│   ├── fine_manager.py                <-- UC-04: Overdue Fine Settlement
-│   ├── notification.py                <-- Hold-ready email & retry queue
-│   ├── reservation_manager.py         <-- Hold placement & 72h auto-expire
-│   ├── security.py                    <-- Rate limiting (60/min) & XSS filter
-│   ├── templates/                     <-- Accessible HTML5 templates
-│   └── static/                        <-- WCAG 2.1 AA responsive CSS/JS
-├── tests/
-│   ├── conftest.py                    <-- Pytest fixtures & in-memory DB
-│   ├── test_admin.py                  <-- TC-ADM tests
-│   ├── test_app_routes.py             <-- Web views & API route tests
-│   ├── test_auth.py                   <-- TC-AUTH tests
-│   ├── test_catalog_search.py         <-- TC-SRCH tests
-│   ├── test_coverage_boost.py         <-- Helper & edge case tests
-│   ├── test_fine_manager.py           <-- TC-FINE tests (UC-04)
-│   ├── test_notification.py           <-- TC-NOTF tests
-│   ├── test_reservation_manager.py    <-- TC-HOLD tests
-│   ├── test_security_audit.py         <-- TC-SEC & TC-AUD tests
-│   └── test_system_e2e.py             <-- End-to-end integration flows
-├── scripts/
-│   ├── seed_data.py                   <-- Generates large scale test sets
-│   └── run_all_tests.py               <-- Automated test execution script
-├── Lab-01-Requirements-and-UML/       <-- Lab 1 individual contributions
-├── Lab-02-Jira-Agile/                 <-- Lab 2 individual contributions
-├── Lab-03-Component-Architecture/     <-- Lab 3 individual contributions
-├── Lab-04-SRS-SAD-STP/                <-- Lab 4 core specifications
-├── pytest.ini
-├── requirements.txt
-└── README.md
-```
-
----
-*© 2026 PES University — Software Engineering Mini-Project Team Collaboration*
+2026 PES University - Software Engineering Mini-Project Team Collaboration

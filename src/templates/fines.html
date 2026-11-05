@@ -19,15 +19,15 @@
         <div class="summary-status">
             {% if fines_info.is_hold_blocked %}
                 <div class="alert alert-danger" role="alert">
-                    ⚠️ <strong>Reservation Block Active:</strong> Your outstanding fine balance exceeds the ${{ "%.2f"|format(fines_info.threshold) }} threshold. Settle overdue fees to unlock new book holds.
+                     <strong>Reservation Block Active:</strong> Your outstanding fine balance exceeds the ${{ "%.2f"|format(fines_info.threshold) }} threshold. Settle overdue fees to unlock new book holds.
                 </div>
             {% elif fines_info.total_unpaid > 0 %}
                 <div class="alert alert-warning" role="alert">
-                    ℹ️ You have pending overdue fines. Settle them promptly to avoid reservation restrictions.
+                    ℹ You have pending overdue fines. Settle them promptly to avoid reservation restrictions.
                 </div>
             {% else %}
                 <div class="alert alert-success" role="alert">
-                    ✅ Your account has zero overdue fines. Full reservation privileges are active.
+                     Your account has zero overdue fines. Full reservation privileges are active.
                 </div>
             {% endif %}
         </div>
@@ -85,7 +85,7 @@
             </div>
         {% else %}
             <div class="empty-state-card">
-                <span class="empty-icon">🎉</span>
+                <span class="empty-icon"></span>
                 <h3>No Overdue Fine Records</h3>
                 <p>No historical or pending fine records on file for account {{ user.member_id }}.</p>
             </div>

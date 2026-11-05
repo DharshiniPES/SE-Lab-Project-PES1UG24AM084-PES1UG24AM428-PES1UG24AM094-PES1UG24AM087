@@ -12,7 +12,7 @@
         <div class="nav-container">
             <div class="brand">
                 <a href="{{ url_for('ui_home') }}" class="brand-link" aria-label="Digital Campus Library Home">
-                    <span class="brand-icon">📚</span>
+                    <span class="brand-icon"></span>
                     <span class="brand-title">Campus Library Gateway</span>
                 </a>
                 <span class="badge badge-campus">PES SE Lab 2026</span>
@@ -26,7 +26,7 @@
                         <a href="{{ url_for('ui_admin_dashboard') }}" class="nav-item nav-admin">Librarian Admin</a>
                     {% endif %}
                     <span class="user-pill" aria-label="Signed in as {{ user.name }}">
-                        👤 {{ user.name }} ({{ user.member_id }})
+                         {{ user.name }} ({{ user.member_id }})
                     </span>
                     <a href="{{ url_for('ui_logout') }}" class="btn btn-outline-sm">Log Out</a>
                 {% else %}
