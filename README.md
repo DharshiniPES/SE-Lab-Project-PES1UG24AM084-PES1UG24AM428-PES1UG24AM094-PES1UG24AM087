@@ -60,6 +60,7 @@ All four formal test reports executed during the testing window (**2nd Nov to 6t
 | **Branch Coverage Report** | [`docs/Branch_Coverage_Report.md`](docs/Branch_Coverage_Report.md) | **82.6% branch coverage** across 270 decision points; verifies all boundary conditions and error branches. |
 | **Executive Test Summary** | [`docs/Test_Summary_Report.md`](docs/Test_Summary_Report.md) | Executive summary and formal sign-offs across all 4 team members. |
 | **Sprint-3 and Jira Report** | [`docs/Sprint_3_Report_and_Jira_Tracking.md`](docs/Sprint_3_Report_and_Jira_Tracking.md) | Agile tracking, user stories, Fibonacci story points (85 pts total), 100% completed burndown chart. |
+| **Interactive Jira Dashboard** | [`docs/jira_dashboard.html`](docs/jira_dashboard.html) | Interactive Atlassian Jira Software board (Kanban columns, Backlog, Burndown chart, SRS Traceability). Also served at `/jira`. |
 | **Test Plan Word Document** | [`docs/Test_Plan_Library_Reservation_Gateway_v2.0.docx`](docs/Test_Plan_Library_Reservation_Gateway_v2.0.docx) | Official formatted Microsoft Word STP v2.0 document. |
 
 ---
@@ -171,6 +172,7 @@ Open a browser and navigate to `http://localhost:5000`:
 - **Overdue Fines and Payment Desk (UC-04b)**: `/fines`
 - **Head Librarian Administration**: `/admin`
 - **Campus SSO Login**: `/login`
+- **Interactive Jira Agile Dashboard**: `/jira`
 - **System Health Endpoint**: `/health`
 
 ---

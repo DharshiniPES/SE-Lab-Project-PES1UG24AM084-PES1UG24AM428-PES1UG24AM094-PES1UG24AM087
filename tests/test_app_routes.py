@@ -142,3 +142,10 @@ class TestAppRoutes:
         # Login missing member_id
         r4 = client.post("/auth/login", json={})
         assert r4.status_code == 400
+
+    def test_ui_jira_dashboard(self, client):
+        r = client.get("/jira")
+        assert r.status_code == 200
+        assert b"Jira Software" in r.data
+        assert b"Digital Campus Library Reservation Gateway" in r.data
+        assert b"LRG-301" in r.data

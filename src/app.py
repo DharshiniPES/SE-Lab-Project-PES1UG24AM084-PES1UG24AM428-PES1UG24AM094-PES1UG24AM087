@@ -532,6 +532,15 @@ def create_app(
         resp.delete_cookie("lrg_session")
         return resp
 
+    @app.route("/jira", methods=["GET"])
+    def ui_jira_dashboard():
+        """Interactive Atlassian Jira Agile Dashboard for presentation and sprint evaluation."""
+        jira_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "docs", "jira_dashboard.html")
+        if os.path.exists(jira_path):
+            with open(jira_path, "r", encoding="utf-8") as f:
+                return f.read(), 200, {"Content-Type": "text/html; charset=utf-8"}
+        return "Jira dashboard file not found", 404
+
     return app
 
 
