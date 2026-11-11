@@ -1,0 +1,25 @@
+Issue Type,Issue Key,Summary,Description,Epic Link,Epic Name,Story Points,Priority,Assignee,Status,Resolution,Sprint
+Epic,EPIC-1,Catalog & Discovery Engine,High-speed catalog search by Title Author and ISBN with query sanitization,,Catalog & Discovery Engine,16,Highest,Divyansh,Done,Done,Sprint 1
+Epic,EPIC-2,Member Circulation Holds & Fines,Hold placement FIFO queueing cancellation and UC-04 overdue fine settlement,,Member Circulation Holds & Fines,32,Highest,Dharshini V,Done,Done,Sprint 2
+Epic,EPIC-3,Librarian Administration & Reporting,Librarian book returns hold promotions and demand analytics,,Librarian Administration & Reporting,14,High,Dhareen G,Done,Done,Sprint 2
+Epic,EPIC-4,Security Architecture CI/CD & QA,Campus SSO auth lockout rate limiting CI/CD workflow and test reports,,Security Architecture CI/CD & QA,23,Highest,Dhruv Talavat,Done,Done,Sprint 3
+Story,LRG-101,Relational SQLite Schema & Initial Seed Data,Provisions database schema with foreign keys and initial catalog entries,EPIC-4,,5,Highest,Dhruv Talavat,Done,Done,Sprint 1
+Story,LRG-102,Catalog Search by Title Author ISBN (LRG-F-001),Indexed search across 100000+ catalog titles with sub-second response,EPIC-1,,5,Highest,Divyansh,Done,Done,Sprint 1
+Story,LRG-103,Search Input Validation & Sanitization (LRG-F-002),Sanitizes search query against SQL injection and cross-site scripting (XSS),EPIC-1,,3,High,Divyansh,Done,Done,Sprint 1
+Story,LRG-104,Campus SSO Authentication & Session Engine (LRG-F-010),OpenID Connect SSO token verification and brute force lockout after 5 failed attempts,EPIC-4,,5,Highest,Dhareen G,Done,Done,Sprint 1
+Story,LRG-105,Responsive Catalog Search Web UI,Mobile-responsive HTML5 search interface meeting WCAG 2.1 AA contrast standards,EPIC-1,,3,Medium,Dharshini V,Done,Done,Sprint 1
+Story,LRG-106,Baseline Unit Tests for Search & Authentication,Automated pytest suite for Sprint 1 catalog and auth modules,EPIC-4,,3,Medium,Dhareen G,Done,Done,Sprint 1
+Story,LRG-201,Place Hold on Checked-Out Book (LRG-F-020),Allows student members to place reservation holds with sequential FIFO queue allocation,EPIC-2,,5,Highest,Dharshini V,Done,Done,Sprint 2
+Story,LRG-202,Prevent Duplicate & Available Holds (LRG-F-021),Enforces business validation to reject holds on Available titles and duplicate holds,EPIC-2,,3,High,Dharshini V,Done,Done,Sprint 2
+Story,LRG-203,View & Cancel Active Holds (LRG-F-022),Student portal view of active holds with instant cancellation and queue promotion,EPIC-2,,3,High,Divyansh,Done,Done,Sprint 2
+Story,LRG-204,Dynamic FIFO Queue Position Progression (LRG-F-023),Gapless queue re-sequencing upon hold cancellation or fulfillment,EPIC-2,,5,High,Dhruv Talavat,Done,Done,Sprint 2
+Story,LRG-205,Return Title & Hold Promotion to Ready (LRG-F-040),Librarian return processing promoting position-1 member to Ready with 72h window,EPIC-3,,5,Highest,Dhareen G,Done,Done,Sprint 2
+Story,LRG-206,Hold Demand Report for Librarian (LRG-F-041),High-demand title ranking report sorted by queue length for procurement planning,EPIC-3,,3,Medium,Divyansh,Done,Done,Sprint 2
+Story,LRG-301,UC-04: Overdue Fine Assessment & Balance Engine,Daily late fee assessment ($1/day) and itemized fine record management,EPIC-2,,5,Highest,Dharshini V,Done,Done,Sprint 3
+Story,LRG-302,UC-04: Campus Wallet / UPI Settlement & Digital Receipt,Payment settlement through Campus Wallet and cryptographically verifiable digital receipts,EPIC-2,,5,Highest,Dharshini V,Done,Done,Sprint 3
+Story,LRG-303,UC-04: Hold Restriction when Unpaid Fines >= $20,Automated restriction blocking hold requests if student has outstanding fines >= $20,EPIC-2,,3,High,Dharshini V,Done,Done,Sprint 3
+Story,LRG-304,72-Hour Ready Hold Auto-Expiration & Cascade Promotion,Automated worker expiring unclaimed Ready holds after 72 hours and cascading to next member,EPIC-2,,5,Highest,Dhruv Talavat,Done,Done,Sprint 3
+Story,LRG-305,Notification Retry Engine & Failure Audit Logging,Exponential backoff retry queue (3 attempts) on SMTP dispatch failure with dead-letter logging,EPIC-2,,3,Medium,Divyansh,Done,Done,Sprint 3
+Story,LRG-306,Sliding-Window Rate Limiter & Cookie Security (LRG-SR-007),Sliding-window rate limiter (60 req/min) and HTTP cookie security attributes,EPIC-4,,3,High,Dhruv Talavat,Done,Done,Sprint 3
+Story,LRG-307,Automated GitHub Actions CI/CD Pipeline (ci.yml),Automated workflow executing linting hermetic tests and 70% coverage threshold gating,EPIC-4,,3,High,Dhareen G,Done,Done,Sprint 3
+Story,LRG-308,Execute Full Test Plan & Generate 4 Mandatory Test Reports,Execution of 117 automated tests and generation of Unit System Coverage and Branch reports,EPIC-4,,5,Highest,Dhareen G & Dharshini V,Done,Done,Sprint 3
