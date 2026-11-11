@@ -1,11 +1,13 @@
 """
 Automated Jira Cloud REST API Synchronizer for LRG Project.
 Takes Atlassian Jira Cloud domain, email, and API token to create
-Epics, User Stories, Sprints, and transitions to Done via Jira REST API v3.
+Epics, User Stories, Sprints, and transitions via Jira REST API v3.
+Robust URL normalization, error handling, and project discovery.
 """
 
 import os
 import sys
+import re
 import json
 import base64
 import urllib.request
@@ -52,59 +54,129 @@ JIRA_ISSUES_DATA = [
 ]
 
 
+def normalize_domain(raw_input_domain: str) -> str:
+    """Normalize input domain to a clean https://<subdomain>.atlassian.net URL."""
+    d = raw_input_domain.strip()
+    # Strip any leading http/https and any colon or slashes
+    d = re.sub(r'^https?[:/]+', '', d, flags=re.I)
+    # Strip trailing slashes and paths (e.g. /jira/your-work)
+    d = d.split('/')[0].strip()
+    # Replace underscores with hyphens if user typed underscores for domain name
+    if '_' in d and not d.endswith('.atlassian.net'):
+        d = d.replace('_', '-')
+    # If user only typed the subdomain (e.g. "my-team"), append .atlassian.net
+    if '.' not in d:
+        d = f"{d}.atlassian.net"
+    return f"https://{d}"
+
+
 def jira_request(url, auth_header, method="GET", data=None):
     headers = {
         "Authorization": auth_header,
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        "Accept": "application/json",
+        "User-Agent": "Antigravity-LRG-Jira-Sync/2.0"
     }
     body = json.dumps(data).encode("utf-8") if data else None
     req = urllib.request.Request(url, data=body, headers=headers, method=method)
     try:
-        with urllib.request.urlopen(req) as resp:
+        with urllib.request.urlopen(req, timeout=20) as resp:
             content = resp.read().decode("utf-8")
             return resp.status, json.loads(content) if content else {}
     except urllib.error.HTTPError as e:
         err_msg = e.read().decode("utf-8")
-        return e.code, {"error": err_msg}
+        try:
+            parsed = json.loads(err_msg)
+            return e.code, parsed
+        except Exception:
+            return e.code, {"error": err_msg}
+    except urllib.error.URLError as e:
+        return 0, {"error": f"Network / DNS Error: {e.reason}"}
+    except Exception as e:
+        return 0, {"error": str(e)}
 
 
 def main():
     print("=" * 70)
-    print("ATLASSIAN JIRA CLOUD REST API SYNCHRONIZER")
+    print("ATLASSIAN JIRA CLOUD REST API SYNCHRONIZER (LRG PROJECT)")
     print("=" * 70)
 
-    jira_domain = os.environ.get("JIRA_DOMAIN") or input("Enter Jira Domain (e.g. https://your-name.atlassian.net): ").strip()
-    if not jira_domain.startswith("http"):
-        jira_domain = f"https://{jira_domain}"
-    jira_domain = jira_domain.rstrip("/")
-
-    email = os.environ.get("JIRA_EMAIL") or input("Enter Jira Email: ").strip()
-    api_token = os.environ.get("JIRA_API_TOKEN") or input("Enter Jira API Token: ").strip()
-    project_key = os.environ.get("JIRA_PROJECT_KEY") or input("Enter Jira Project Key [default LRG]: ").strip() or "LRG"
+    raw_domain = os.environ.get("JIRA_DOMAIN") or input(
+        "Enter Jira Domain (e.g. my-team.atlassian.net or https://my-team.atlassian.net): "
+    ).strip()
+    
+    jira_domain = normalize_domain(raw_domain)
+    email = os.environ.get("JIRA_EMAIL") or input("Enter Jira Account Email: ").strip()
+    api_token = os.environ.get("JIRA_API_TOKEN") or input("Enter Atlassian API Token: ").strip()
 
     auth_str = f"{email}:{api_token}"
     auth_header = f"Basic {base64.b64encode(auth_str.encode('utf-8')).decode('utf-8')}"
 
-    print(f"\nConnecting to {jira_domain} as {email}...")
+    print(f"\n[1/4] Connecting to {jira_domain} as {email}...")
     status, res = jira_request(f"{jira_domain}/rest/api/3/myself", auth_header)
     if status != 200:
-        print(f"Authentication Failed (HTTP {status}): {res.get('error', 'Check credentials')}")
+        print(f"\nAuthentication Failed (HTTP {status})!")
+        print(f"Error Details: {res.get('error', res.get('errorMessages', 'Check credentials or domain'))}")
+        print("\nTroubleshooting Tips:")
+        print("1. Check that the domain is your exact Atlassian subdomain (e.g. yourname.atlassian.net).")
+        print("2. Ensure your email matches your Atlassian account login.")
+        print("3. Ensure the API token was generated at: https://id.atlassian.com/manage-profile/security/api-tokens")
         return
 
-    print(f"Authenticated successfully as: {res.get('displayName', email)}")
+    user_name = res.get('displayName', email)
+    print(f"Successfully authenticated as: {user_name}")
 
-    # Check project
-    status, proj = jira_request(f"{jira_domain}/rest/api/3/project/{project_key}", auth_header)
+    # [2/4] Fetch available projects
+    print("\n[2/4] Discovering Jira projects on your account...")
+    status, projects = jira_request(f"{jira_domain}/rest/api/3/project", auth_header)
+    if status != 200 or not isinstance(projects, list):
+        print(f"Could not retrieve projects (HTTP {status}): {projects}")
+        return
+
+    if not projects:
+        print("\nNo projects found on this Jira site!")
+        print("Please open Jira in your browser, click 'Projects' -> 'Create project' -> 'Scrum', name it 'Library Reservation Gateway' (Key: LRG), then run this script again.")
+        return
+
+    print("Found existing Jira projects:")
+    for p in projects:
+        print(f"  - [{p.get('key')}] {p.get('name')} (id: {p.get('id')})")
+
+    # Prompt or auto-match project
+    default_key = projects[0].get('key')
+    match_lrg = next((p.get('key') for p in projects if p.get('key') in ('LRG', 'DCLRG', 'LIB')), default_key)
+    
+    project_key = os.environ.get("JIRA_PROJECT_KEY") or input(
+        f"\nEnter Target Project Key [press Enter for '{match_lrg}']: "
+    ).strip() or match_lrg
+
+    # [3/4] Verify project issue types
+    print(f"\n[3/4] Fetching issue types for project '{project_key}'...")
+    status, proj_details = jira_request(f"{jira_domain}/rest/api/3/project/{project_key}", auth_header)
     if status != 200:
-        print(f"Project '{project_key}' not found on your Jira site.")
-        print(f"Please create a Scrum project with key '{project_key}' first on Jira, then re-run.")
+        print(f"Could not fetch details for project '{project_key}' (HTTP {status})")
         return
 
-    print(f"Found Project: {proj.get('name')} ({project_key})")
-    print("\nCreating issues...")
+    valid_types = [it.get('name') for it in proj_details.get('issueTypes', [])]
+    print(f"Available Issue Types: {', '.join(valid_types)}")
+
+    # Prefer 'Task' or 'Story' or first non-subtask
+    story_type_name = "Task"
+    if "Story" in valid_types:
+        story_type_name = "Story"
+    elif "Task" in valid_types:
+        story_type_name = "Task"
+    elif valid_types:
+        story_type_name = valid_types[0]
+
+    epic_type_name = "Epic" if "Epic" in valid_types else story_type_name
+
+    # [4/4] Create issues
+    print(f"\n[4/4] Creating {len(JIRA_ISSUES_DATA)} issues in project '{project_key}'...")
+    created_count = 0
 
     for item in JIRA_ISSUES_DATA:
+        target_type = epic_type_name if item["type"] == "Epic" else story_type_name
         issue_payload = {
             "fields": {
                 "project": {"key": project_key},
@@ -119,17 +191,22 @@ def main():
                         }
                     ]
                 },
-                "issuetype": {"name": "Task" if item["type"] == "Story" else "Task"}
+                "issuetype": {"name": target_type}
             }
         }
         st, created = jira_request(f"{jira_domain}/rest/api/3/issue", auth_header, method="POST", data=issue_payload)
         if st in (200, 201):
-            print(f"Created: {created.get('key')} - {item['summary']}")
+            created_count += 1
+            print(f"  + [{created.get('key')}] {item['summary']}")
         else:
-            print(f"Skipped/Error ({st}) for {item['summary']}: {created.get('error', '')[:100]}")
+            err_details = created.get('errors') or created.get('errorMessages') or created.get('error')
+            print(f"  - Failed for {item['summary']} (HTTP {st}): {err_details}")
 
-    print("\nSync Complete! Open your Jira board at:")
+    print("\n" + "=" * 70)
+    print(f"SUCCESS: Created {created_count} issues in Jira project '{project_key}'!")
+    print(f"Open your Jira board here:")
     print(f"{jira_domain}/jira/software/projects/{project_key}/boards")
+    print("=" * 70)
 
 
 if __name__ == "__main__":
