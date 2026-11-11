@@ -129,7 +129,7 @@ xychart-beta
 To fulfill the requirement:
 > *"Implement a proper CI/CD pipeline and integrate build, testing, and deployment stages wherever applicable."*
 
-A multi-stage GitHub Actions workflow was configured at [`.github/workflows/ci.yml`](file:///.github/workflows/ci.yml):
+A multi-stage GitHub Actions workflow was configured at [`.github/workflows/ci.yml`](../.github/workflows/ci.yml):
 
 ```mermaid
 flowchart TD

@@ -29,11 +29,11 @@ All three course deliverables are maintained in this single repository:
 
 ### Deliverable 1: System Specifications and Architecture (`Lab-04-SRS-SAD-STP/`)
 Foundational software engineering documentation for the Digital Campus Library Reservation Gateway:
-- **Software Requirements Specification (SRS)**: [`Lab-04-SRS-SAD-STP/SRS_Library_Reservation_Gateway (1).pdf`](file:///Lab-04-SRS-SAD-STP/SRS_Library_Reservation_Gateway%20(1).pdf)
+- **Software Requirements Specification (SRS)**: [`Lab-04-SRS-SAD-STP/SRS_Library_Reservation_Gateway (1).pdf`](Lab-04-SRS-SAD-STP/SRS_Library_Reservation_Gateway%20(1).pdf)
   - Complete functional requirements (`LRG-F-001` to `LRG-F-052`), non-functional requirements (`LRG-NF-001` to `LRG-NF-007`), security specifications (`LRG-SR-001` to `LRG-SR-007`), UML use-case models, and Requirements Traceability Matrix (RTM).
-- **Software Architecture and Design (SAD)**: [`Lab-04-SRS-SAD-STP/SAD_Library_Reservation_Gateway (1).pdf`](file:///Lab-04-SRS-SAD-STP/SAD_Library_Reservation_Gateway%20(1).pdf)
+- **Software Architecture and Design (SAD)**: [`Lab-04-SRS-SAD-STP/SAD_Library_Reservation_Gateway (1).pdf`](Lab-04-SRS-SAD-STP/SAD_Library_Reservation_Gateway%20(1).pdf)
   - Layered modular architecture, provided and required component interfaces, sequence diagrams, REST API schemas, and STRIDE threat modeling.
-- **Software Test Plan (STP v2.0 - Post-Sprint Updated)**: [`Lab-04-SRS-SAD-STP/Test_Plan_Library_Reservation_Gateway.docx`](file:///Lab-04-SRS-SAD-STP/Test_Plan_Library_Reservation_Gateway.docx)
+- **Software Test Plan (STP v2.0 - Post-Sprint Updated)**: [`Lab-04-SRS-SAD-STP/Test_Plan_Library_Reservation_Gateway.docx`](Lab-04-SRS-SAD-STP/Test_Plan_Library_Reservation_Gateway.docx)
   - Post-sprint updated test strategy, entry and exit criteria, updated test catalogue for all 10 use cases, and 100% accepted RTM.
 
 ### Deliverable 2: Software Implementation (`src/`)
@@ -53,14 +53,14 @@ All four formal test reports executed during the testing window (**2nd Nov to 6t
 
 | Deliverable Item | Document Reference | Scope and Results |
 | :--- | :--- | :--- |
-| **Updated Test Cases** | [`docs/Updated_Test_Case_Document.md`](file:///docs/Updated_Test_Case_Document.md) | Granular post-sprint changes for all 10 use cases, baseline comparisons, and updated test cases. |
-| **Unit Test Report** | [`docs/Unit_Test_Report.md`](file:///docs/Unit_Test_Report.md) | 88 automated unit and integration tests itemized by use case; **100% pass rate**; 0 open defects. |
-| **System Validation Report** | [`docs/System_Validation_Report.md`](file:///docs/System_Validation_Report.md) | Multi-tier E2E validation for all 10 use cases, NFR latency benchmarks (0.0051s), WCAG compliance, STRIDE matrix. |
-| **Code Coverage Report** | [`docs/Code_Coverage_Report.md`](file:///docs/Code_Coverage_Report.md) | **89% overall statement coverage**; **93.8% business-layer coverage** (surpassing 70% requirement). |
-| **Branch Coverage Report** | [`docs/Branch_Coverage_Report.md`](file:///docs/Branch_Coverage_Report.md) | **82.6% branch coverage** across 270 decision points; verifies all boundary conditions and error branches. |
-| **Executive Test Summary** | [`docs/Test_Summary_Report.md`](file:///docs/Test_Summary_Report.md) | Executive summary and formal sign-offs across all 4 team members. |
-| **Sprint-3 and Jira Report** | [`docs/Sprint_3_Report_and_Jira_Tracking.md`](file:///docs/Sprint_3_Report_and_Jira_Tracking.md) | Agile tracking, user stories, Fibonacci story points (85 pts total), 100% completed burndown chart. |
-| **Test Plan Word Document** | [`docs/Test_Plan_Library_Reservation_Gateway_v2.0.docx`](file:///docs/Test_Plan_Library_Reservation_Gateway_v2.0.docx) | Official formatted Microsoft Word STP v2.0 document. |
+| **Updated Test Cases** | [`docs/Updated_Test_Case_Document.md`](docs/Updated_Test_Case_Document.md) | Granular post-sprint changes for all 10 use cases, baseline comparisons, and updated test cases. |
+| **Unit Test Report** | [`docs/Unit_Test_Report.md`](docs/Unit_Test_Report.md) | 88 automated unit and integration tests itemized by use case; **100% pass rate**; 0 open defects. |
+| **System Validation Report** | [`docs/System_Validation_Report.md`](docs/System_Validation_Report.md) | Multi-tier E2E validation for all 10 use cases, NFR latency benchmarks (0.0051s), WCAG compliance, STRIDE matrix. |
+| **Code Coverage Report** | [`docs/Code_Coverage_Report.md`](docs/Code_Coverage_Report.md) | **89% overall statement coverage**; **93.8% business-layer coverage** (surpassing 70% requirement). |
+| **Branch Coverage Report** | [`docs/Branch_Coverage_Report.md`](docs/Branch_Coverage_Report.md) | **82.6% branch coverage** across 270 decision points; verifies all boundary conditions and error branches. |
+| **Executive Test Summary** | [`docs/Test_Summary_Report.md`](docs/Test_Summary_Report.md) | Executive summary and formal sign-offs across all 4 team members. |
+| **Sprint-3 and Jira Report** | [`docs/Sprint_3_Report_and_Jira_Tracking.md`](docs/Sprint_3_Report_and_Jira_Tracking.md) | Agile tracking, user stories, Fibonacci story points (85 pts total), 100% completed burndown chart. |
+| **Test Plan Word Document** | [`docs/Test_Plan_Library_Reservation_Gateway_v2.0.docx`](docs/Test_Plan_Library_Reservation_Gateway_v2.0.docx) | Official formatted Microsoft Word STP v2.0 document. |
 
 ---
 
@@ -177,7 +177,7 @@ Open a browser and navigate to `http://localhost:5000`:
 
 ## 5. Continuous Integration (CI/CD) Pipeline
 
-Configured at [`.github/workflows/ci.yml`](file:///.github/workflows/ci.yml):
+Configured at [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
 - **Triggers**: On every `push` and `pull_request` to `main` and teammate branches.
 - **Pipeline Stages**:
   1. Environment Provisioning & Dependency Caching
