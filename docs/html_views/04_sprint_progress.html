@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jira Sprint Progress Board - Digital Campus Library Reservation Gateway</title>
+    <style>
+        
+    :root {
+        --jira-blue: #0052cc;
+        --jira-dark-blue: #0747a6;
+        --jira-navy: #172b4d;
+        --jira-subtle: #5e6c84;
+        --jira-bg: #f4f5f7;
+        --jira-card-bg: #ffffff;
+        --jira-border: #dfe1e6;
+        --jira-hover: #ebecf0;
+        --jira-green: #00875a;
+        --jira-green-bg: #e3fcef;
+        --jira-orange: #ffab00;
+        --jira-orange-bg: #fff0b3;
+        --jira-red: #de350b;
+        --jira-red-bg: #ffebe6;
+        --jira-purple: #5243aa;
+        --jira-purple-bg: #eae6ff;
+        --jira-teal: #008da6;
+        --jira-teal-bg: #e6fcff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--jira-bg);
+        color: var(--jira-navy);
+        line-height: 1.4;
+        font-size: 13px;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* Global Nav */
+    .jira-navbar {
+        background-color: #0c66e4;
+        color: #ffffff;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .jira-navbar-left { display: flex; align-items: center; gap: 20px; }
+    .jira-brand { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .jira-nav-link { color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 500; opacity: 0.9; cursor: pointer; }
+    .jira-nav-link.active { opacity: 1; font-weight: 600; border-bottom: 2px solid #fff; padding-bottom: 12px; }
+    .jira-navbar-right { display: flex; align-items: center; gap: 14px; }
+    .jira-search-bar {
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 4px;
+        color: #fff;
+        padding: 5px 12px;
+        font-size: 13px;
+        width: 220px;
+    }
+    .jira-search-bar::placeholder { color: rgba(255,255,255,0.7); }
+    .user-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #ffab00;
+        color: #172b4d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    /* Subheader */
+    .project-subheader {
+        background: #ffffff;
+        border-bottom: 1px solid var(--jira-border);
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .breadcrumbs { font-size: 12px; color: var(--jira-subtle); margin-bottom: 4px; }
+    .breadcrumbs a { color: var(--jira-blue); text-decoration: none; }
+    .project-title { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+    .project-badge {
+        background: var(--jira-hover);
+        color: var(--jira-subtle);
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+    .action-buttons { display: flex; gap: 8px; }
+    .jira-btn {
+        background: var(--jira-hover);
+        border: 1px solid var(--jira-border);
+        padding: 6px 12px;
+        border-radius: 3px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .jira-btn-primary { background: var(--jira-blue); color: #fff; border-color: var(--jira-blue); }
+
+    /* Page Layout */
+    .layout-container { display: flex; min-height: calc(100vh - 100px); }
+    .sidebar {
+        width: 240px;
+        background: #fafbfc;
+        border-right: 1px solid var(--jira-border);
+        padding: 16px 8px;
+        flex-shrink: 0;
+    }
+    .sidebar-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--jira-subtle); padding: 8px 12px 4px; }
+    .sidebar-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 4px;
+        color: var(--jira-navy);
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .sidebar-item:hover { background: var(--jira-hover); }
+    .sidebar-item.active { background: #e9f2ff; color: var(--jira-blue); font-weight: 600; }
+    .main-content { flex: 1; padding: 20px 24px; overflow-x: hidden; }
+
+    /* Tags & Lozenges */
+    .lozenge {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    .lozenge-done { background: var(--jira-green-bg); color: var(--jira-green); }
+    .lozenge-progress { background: var(--jira-orange-bg); color: #974f00; }
+    .lozenge-todo { background: var(--jira-hover); color: var(--jira-subtle); }
+    .epic-pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .epic-fine { background: var(--jira-purple-bg); color: var(--jira-purple); }
+    .epic-catalog { background: #deebff; color: #0747a6; }
+    .epic-auth { background: var(--jira-teal-bg); color: var(--jira-teal); }
+    .epic-hold { background: var(--jira-orange-bg); color: #974f00; }
+    .epic-qa { background: var(--jira-green-bg); color: var(--jira-green); }
+
+    .story-points {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #dfe1e6;
+        color: #172b4d;
+        font-size: 11px;
+        font-weight: 700;
+    }
+    .member-avatar-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--jira-navy);
+    }
+    .avatar-circle {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+        .board-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .quick-filters { display: flex; gap: 8px; align-items: center; }
+        .filter-chip {
+            background: #fff;
+            border: 1px solid var(--jira-border);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--jira-navy);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .filter-chip.active { background: #e9f2ff; color: var(--jira-blue); border-color: #0c66e4; font-weight: 600; }
+
+        .board-columns-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 2.5fr;
+            gap: 16px;
+            align-items: start;
+        }
+        .board-column {
+            background: #f4f5f7;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        .column-header {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--jira-subtle);
+            text-transform: uppercase;
+            padding: 6px 8px 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .column-empty-state {
+            padding: 24px 12px;
+            text-align: center;
+            color: var(--jira-subtle);
+            font-size: 12px;
+            border: 2px dashed #dfe1e6;
+            border-radius: 4px;
+            margin-top: 6px;
+        }
+
+        .done-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .jira-issue-card {
+            background: #ffffff;
+            border: 1px solid var(--jira-border);
+            border-radius: 4px;
+            padding: 10px 12px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 105px;
+        }
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+        .card-summary { font-size: 12px; font-weight: 600; color: var(--jira-navy); line-height: 1.35; margin-bottom: 8px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 6px; border-top: 1px solid #f4f5f7; }
+    </style>
+</head>
+<body>
+    <div class="jira-navbar">
+        <div class="jira-navbar-left">
+            <div class="jira-brand">Jira Software</div>
+            <a class="jira-nav-link active">Projects</a>
+            <a class="jira-nav-link">Filters</a>
+            <a class="jira-nav-link">Dashboards</a>
+        </div>
+        <div class="jira-navbar-right">
+            <input class="jira-search-bar" placeholder="Search board..." value="sprint in (openSprints())">
+            <div class="user-avatar">DV</div>
+        </div>
+    </div>
+
+    <div class="project-subheader">
+        <div>
+            <div class="breadcrumbs"><a href="#">Projects</a> / <a href="#">DCLRG</a> / Active Sprints</div>
+            <div class="project-title">
+                DCLRG Board &bull; Sprint 3: Spill-Overs, UC-04 Fine Settlement & Test Reporting
+                <span class="project-badge">ACTIVE SCRUM BOARD</span>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button class="jira-btn">Days remaining: 0</button>
+            <button class="jira-btn jira-btn-primary">Complete sprint</button>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <div class="sidebar">
+            <div class="sidebar-section-title">Planning & Delivery</div>
+            <a class="sidebar-item">Dashboard Overview</a>
+            <a class="sidebar-item">Roadmap</a>
+            <a class="sidebar-item">Backlog</a>
+            <a class="sidebar-item active">Active Sprint Board</a>
+            <a class="sidebar-item">Reports</a>
+            <div class="sidebar-section-title" style="margin-top: 16px;">Board Views</div>
+            <a class="sidebar-item">Group by: None</a>
+            <a class="sidebar-item">Configure Board</a>
+        </div>
+
+        <div class="main-content">
+            <div class="board-controls">
+                <div class="quick-filters">
+                    <span style="font-size: 12px; font-weight: 600; color: var(--jira-subtle); margin-right: 4px;">QUICK FILTERS:</span>
+                    <span class="filter-chip active">All Stories</span>
+                    <span class="filter-chip">Dharshini V (PES1UG24AM428)</span>
+                    <span class="filter-chip">Dhareen G (PES1UG24AM084)</span>
+                    <span class="filter-chip">Dhruv Talavat (PES1UG24AM087)</span>
+                    <span class="filter-chip">Divyansh (PES1UG24AM094)</span>
+                    <span class="filter-chip">UC-04 Fines</span>
+                </div>
+                <div style="font-size: 12px; color: var(--jira-subtle); font-weight: 500;">
+                    14 Issues &bull; 42 Story Points in Sprint 3
+                </div>
+            </div>
+
+            <div class="board-columns-grid">
+                <!-- TO DO -->
+                <div class="board-column">
+                    <div class="column-header">
+                        <span>TO DO</span>
+                        <span class="story-points" style="background:#dfe1e6;">0</span>
+                    </div>
+                    <div class="column-empty-state">
+                        No issues in To Do.<br>All Sprint 3 backlog items actively delivered.
+                    </div>
+                </div>
+
+                <!-- IN PROGRESS -->
+                <div class="board-column">
+                    <div class="column-header">
+                        <span>IN PROGRESS</span>
+                        <span class="story-points" style="background:#dfe1e6;">0</span>
+                    </div>
+                    <div class="column-empty-state">
+                        No issues in progress.<br>All peer reviews and automated QA gates passed.
+                    </div>
+                </div>
+
+                <!-- DONE -->
+                <div class="board-column" style="background: #e3fcef; border: 1px solid #abf5d1;">
+                    <div class="column-header" style="color: var(--jira-green);">
+                        <span>DONE &bull; COMPLETED</span>
+                        <span class="story-points" style="background: var(--jira-green); color: #fff;">42</span>
+                    </div>
+
+                    <div class="done-cards-grid">
+                        <!-- Card 1 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-fine">Fine Payment</span>
+                                <span class="story-points">3</span>
+                            </div>
+                            <div class="card-summary">DCLRG-2: View Outstanding Fine Balance & Itemized Breakdown</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-2</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#ffab00;">DV</div> Dharshini V</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-fine">Fine Payment</span>
+                                <span class="story-points">2</span>
+                            </div>
+                            <div class="card-summary">DCLRG-3: Select Fine Payment Settlement Method</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-3</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#ffab00;">DV</div> Dharshini V</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-fine">Fine Payment</span>
+                                <span class="story-points">5</span>
+                            </div>
+                            <div class="card-summary">DCLRG-4: Process Overdue Fine Settlement Transaction</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-4</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#ffab00;">DV</div> Dharshini V</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-fine">Fine Payment</span>
+                                <span class="story-points">3</span>
+                            </div>
+                            <div class="card-summary">DCLRG-5: Issue Cryptographic Payment Receipt (SHA-256)</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-5</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#ffab00;">DV</div> Dharshini V</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 5 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-fine">Fine Payment</span>
+                                <span class="story-points">3</span>
+                            </div>
+                            <div class="card-summary">DCLRG-6: Handle Declined & Insufficient Fund Payments</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-6</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#ffab00;">DV</div> Dharshini V</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 6 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-fine">Fine Payment</span>
+                                <span class="story-points">3</span>
+                            </div>
+                            <div class="card-summary">DCLRG-7: Atomic Rollback & Balance Preservation on Failure</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-7</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#ffab00;">DV</div> Dharshini V</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 7 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-fine">Fine Payment</span>
+                                <span class="story-points">5</span>
+                            </div>
+                            <div class="card-summary">DCLRG-8: LRG-301 UC-04 Overdue Fine Assessment & Balance Engine</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-8</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#ffab00;">DV</div> Dharshini V</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 8 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-fine">Fine Payment</span>
+                                <span class="story-points">5</span>
+                            </div>
+                            <div class="card-summary">DCLRG-21: LRG-302 UC-04 Campus Wallet / UPI Settlement & Receipt</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-21</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#ffab00;">DV</div> Dharshini V</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 9 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-fine">Fine Payment</span>
+                                <span class="story-points">3</span>
+                            </div>
+                            <div class="card-summary">DCLRG-22: LRG-303 UC-04 Hold Restriction when Unpaid Fines >= $20</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-22</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#ffab00;">DV</div> Dharshini V</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 10 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-hold">Hold Engine</span>
+                                <span class="story-points">5</span>
+                            </div>
+                            <div class="card-summary">DCLRG-23: LRG-304 72-Hour Ready Hold Auto-Expiration & Cascade</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-23</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#00875a;">DT</div> Dhruv Talavat</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 11 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-qa">Automated QA</span>
+                                <span class="story-points">3</span>
+                            </div>
+                            <div class="card-summary">DCLRG-24: LRG-305 Notification Retry Engine & Failure Audit Logging</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-24</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#5243aa;">D</div> Divyansh</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 12 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-auth">SSO Auth</span>
+                                <span class="story-points">3</span>
+                            </div>
+                            <div class="card-summary">DCLRG-25: LRG-306 Sliding-Window Rate Limiter & Cookie Security</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-25</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#00875a;">DT</div> Dhruv Talavat</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 13 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-qa">Automated QA</span>
+                                <span class="story-points">3</span>
+                            </div>
+                            <div class="card-summary">DCLRG-26: LRG-307 Automated GitHub Actions CI/CD Pipeline (ci.yml)</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-26</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#0c66e4;">DG</div> Dhareen G</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 14 -->
+                        <div class="jira-issue-card">
+                            <div class="card-top">
+                                <span class="epic-pill epic-qa">Automated QA</span>
+                                <span class="story-points">5</span>
+                            </div>
+                            <div class="card-summary">DCLRG-27: LRG-308 Execute Test Plan & Generate 4 Mandatory Reports</div>
+                            <div class="card-footer">
+                                <span style="font-weight: 600; color: var(--jira-subtle);">DCLRG-27</span>
+                                <span class="member-avatar-pill"><div class="avatar-circle" style="background:#ffab00;">DV</div> Dharshini & Dhareen</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

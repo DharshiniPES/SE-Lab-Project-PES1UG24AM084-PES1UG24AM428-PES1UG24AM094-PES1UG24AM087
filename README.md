@@ -2,9 +2,11 @@
 ## Software Engineering Mini-Project - Consolidated Team Repository
 
 [![CI Quality Gate](https://github.com/DharshiniPES/SE-Lab-Project-PES1UG24AM084-PES1UG24AM428-PES1UG24AM094-PES1UG24AM087/actions/workflows/ci.yml/badge.svg)](https://github.com/DharshiniPES/SE-Lab-Project-PES1UG24AM084-PES1UG24AM428-PES1UG24AM094-PES1UG24AM087/actions)
-![Tests](https://img.shields.io/badge/tests-88%2F88%20passing-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-89%25-brightgreen)
-![Branch Coverage](https://img.shields.io/badge/branch%20coverage-83%25-brightgreen)
+![Tests](https://img.shields.io/badge/tests-117%2F117%20passing-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-94%25-brightgreen)
+![Branch Coverage](https://img.shields.io/badge/branch%20coverage-82.6%25-brightgreen)
+[![Jira Board](https://img.shields.io/badge/Jira-DCLRG%20Board-0052CC?logo=jira)](https://abbey6128.atlassian.net/jira/software/projects/DCLRG/boards/2)
+![Velocity](https://img.shields.io/badge/Velocity-90%20SP%20(100%25)-green)
 ![WCAG](https://img.shields.io/badge/accessibility-WCAG%202.1%20AA-blue)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 
@@ -60,12 +62,33 @@ All four formal test reports executed during the testing window (**2nd Nov to 6t
 | **Branch Coverage Report** | [`docs/Branch_Coverage_Report.md`](docs/Branch_Coverage_Report.md) | **82.6% branch coverage** across 270 decision points; verifies all boundary conditions and error branches. |
 | **Executive Test Summary** | [`docs/Test_Summary_Report.md`](docs/Test_Summary_Report.md) | Executive summary and formal sign-offs across all 4 team members. |
 | **Sprint-3 and Jira Report** | [`docs/Sprint_3_Report_and_Jira_Tracking.md`](docs/Sprint_3_Report_and_Jira_Tracking.md) | Agile tracking, user stories, Fibonacci story points (85 pts total), 100% completed burndown chart. |
+| **Jira Screenshots & Sprint Tracking** | [`docs/JIRA_SCREENSHOTS_AND_SPRINT_TRACKING.md`](docs/JIRA_SCREENSHOTS_AND_SPRINT_TRACKING.md) | Formally verified screenshots of Jira Dashboard, Product Backlog, Sprint Backlogs, Sprint Progress, and Burndown Charts. |
 | **Interactive Jira Dashboard** | [`docs/jira_dashboard.html`](docs/jira_dashboard.html) | Interactive Atlassian Jira Software board (Kanban columns, Backlog, Burndown chart, SRS Traceability). Also served at `/jira`. |
 | **Test Plan Word Document** | [`docs/Test_Plan_Library_Reservation_Gateway_v2.0.docx`](docs/Test_Plan_Library_Reservation_Gateway_v2.0.docx) | Official formatted Microsoft Word STP v2.0 document. |
 
 ---
 
-## 3. Git Architecture and Branching Model
+## 3. Jira Agile Sprint Deliverables & Verified Screenshots
+
+All 5 submission requirements mandated for the Software Engineering Mini-Project are archived with full evidence below. Complete visual walkthroughs and event tables are documented in [`docs/JIRA_SCREENSHOTS_AND_SPRINT_TRACKING.md`](docs/JIRA_SCREENSHOTS_AND_SPRINT_TRACKING.md).
+
+- **Live Jira Cloud Workspace**: `https://abbey6128.atlassian.net` (Project `DCLRG`, Board 2)
+- **Delivered Velocity**: 90 Story Points across 3 Sprints (Sprint 1: 24 SP, Sprint 2: 24 SP, Sprint 3: 42 SP) - 100% Commitment Met
+- **Agile User Stories**: 26 User Stories mapped to 5 Epics with Fibonacci points and verified automated test cases
+
+### Required Screenshots Overview
+
+| # | Submission Item | Verified Jira Screenshot | Description & Key Evidence |
+| :-: | :--- | :--- | :--- |
+| **1** | **Jira Dashboard** | [![Jira Dashboard](docs/screenshots/01_jira_dashboard.png)](docs/screenshots/01_jira_dashboard.png) | Project status (ON TRACK), 100% Sprint 3 completion, historical velocity gadget (90 SP total), team workload breakdown by member & SRN, and Epic progress. |
+| **2** | **Product Backlog** | [![Product Backlog](docs/screenshots/02_product_backlog.png)](docs/screenshots/02_product_backlog.png) | 5 Epics panel (`DCLRG-1`, `DCLRG-28`, `DCLRG-29`, `DCLRG-30`, `DCLRG-31`), unscheduled candidate backlog items (`DCLRG-32` to `DCLRG-37`), priority levels, and estimates. |
+| **3** | **Sprint Backlogs** | [![Sprint Backlogs](docs/screenshots/03_sprint_backlogs.png)](docs/screenshots/03_sprint_backlogs.png) | Complete sprint containers for Sprint 1 (24 SP, closed), Sprint 2 (24 SP, closed), and Sprint 3 (42 SP, closed/done) showing all 26 user stories and assignees. |
+| **4** | **Sprint Progress** | [![Sprint Progress](docs/screenshots/04_sprint_progress.png)](docs/screenshots/04_sprint_progress.png) | Active Scrum board view showing columns (To Do: 0, In Progress: 0, Done: 14 issues / 42 SP) with Epic lozenges and member avatars. |
+| **5** | **Burndown Chart(s)** | [![Sprint 3 Burndown Chart](docs/screenshots/05_burndown_chart_sprint3.png)](docs/screenshots/05_burndown_chart_sprint3.png) | Sprint 3 Story Point burndown curve showing ideal guideline vs. actual burn down from 42 SP to 0 SP over 5 days, with daily completion event log. (Sprint 1 & Sprint 2 burndown charts also available in `docs/screenshots/`). |
+
+---
+
+## 4. Git Architecture and Branching Model
 
 This repository is organized strictly for the consolidated project:
 
@@ -143,7 +166,7 @@ SE-Lab-Project/
 
 ---
 
-## 4. Local Quick Start Instructions
+## 5. Local Quick Start Instructions
 
 ### 1. Clone the Repository and Install Dependencies
 ```bash
@@ -154,7 +177,7 @@ pip install -r requirements.txt
 
 ### 2. Run the Automated Test Suite and Check Coverage
 ```bash
-# Execute all 88 tests with statement and branch coverage
+# Execute all 117 tests with statement and branch coverage
 pytest --cov=src --cov-branch --cov-report=term-missing --cov-report=html:docs/coverage_html --cov-report=xml:docs/coverage.xml
 
 # Alternatively, run via the automated script
@@ -177,7 +200,7 @@ Open a browser and navigate to `http://localhost:5000`:
 
 ---
 
-## 5. Continuous Integration (CI/CD) Pipeline
+## 6. Continuous Integration (CI/CD) Pipeline
 
 Configured at [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
 - **Triggers**: On every `push` and `pull_request` to `main` and teammate branches.

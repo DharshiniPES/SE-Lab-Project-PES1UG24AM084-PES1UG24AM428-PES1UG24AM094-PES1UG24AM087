@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jira Sprint Backlogs - Digital Campus Library Reservation Gateway</title>
+    <style>
+        
+    :root {
+        --jira-blue: #0052cc;
+        --jira-dark-blue: #0747a6;
+        --jira-navy: #172b4d;
+        --jira-subtle: #5e6c84;
+        --jira-bg: #f4f5f7;
+        --jira-card-bg: #ffffff;
+        --jira-border: #dfe1e6;
+        --jira-hover: #ebecf0;
+        --jira-green: #00875a;
+        --jira-green-bg: #e3fcef;
+        --jira-orange: #ffab00;
+        --jira-orange-bg: #fff0b3;
+        --jira-red: #de350b;
+        --jira-red-bg: #ffebe6;
+        --jira-purple: #5243aa;
+        --jira-purple-bg: #eae6ff;
+        --jira-teal: #008da6;
+        --jira-teal-bg: #e6fcff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--jira-bg);
+        color: var(--jira-navy);
+        line-height: 1.4;
+        font-size: 13px;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* Global Nav */
+    .jira-navbar {
+        background-color: #0c66e4;
+        color: #ffffff;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .jira-navbar-left { display: flex; align-items: center; gap: 20px; }
+    .jira-brand { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .jira-nav-link { color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 500; opacity: 0.9; cursor: pointer; }
+    .jira-nav-link.active { opacity: 1; font-weight: 600; border-bottom: 2px solid #fff; padding-bottom: 12px; }
+    .jira-navbar-right { display: flex; align-items: center; gap: 14px; }
+    .jira-search-bar {
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 4px;
+        color: #fff;
+        padding: 5px 12px;
+        font-size: 13px;
+        width: 220px;
+    }
+    .jira-search-bar::placeholder { color: rgba(255,255,255,0.7); }
+    .user-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #ffab00;
+        color: #172b4d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    /* Subheader */
+    .project-subheader {
+        background: #ffffff;
+        border-bottom: 1px solid var(--jira-border);
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .breadcrumbs { font-size: 12px; color: var(--jira-subtle); margin-bottom: 4px; }
+    .breadcrumbs a { color: var(--jira-blue); text-decoration: none; }
+    .project-title { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+    .project-badge {
+        background: var(--jira-hover);
+        color: var(--jira-subtle);
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+    .action-buttons { display: flex; gap: 8px; }
+    .jira-btn {
+        background: var(--jira-hover);
+        border: 1px solid var(--jira-border);
+        padding: 6px 12px;
+        border-radius: 3px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .jira-btn-primary { background: var(--jira-blue); color: #fff; border-color: var(--jira-blue); }
+
+    /* Page Layout */
+    .layout-container { display: flex; min-height: calc(100vh - 100px); }
+    .sidebar {
+        width: 240px;
+        background: #fafbfc;
+        border-right: 1px solid var(--jira-border);
+        padding: 16px 8px;
+        flex-shrink: 0;
+    }
+    .sidebar-section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--jira-subtle); padding: 8px 12px 4px; }
+    .sidebar-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 4px;
+        color: var(--jira-navy);
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .sidebar-item:hover { background: var(--jira-hover); }
+    .sidebar-item.active { background: #e9f2ff; color: var(--jira-blue); font-weight: 600; }
+    .main-content { flex: 1; padding: 20px 24px; overflow-x: hidden; }
+
+    /* Tags & Lozenges */
+    .lozenge {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+    .lozenge-done { background: var(--jira-green-bg); color: var(--jira-green); }
+    .lozenge-progress { background: var(--jira-orange-bg); color: #974f00; }
+    .lozenge-todo { background: var(--jira-hover); color: var(--jira-subtle); }
+    .epic-pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .epic-fine { background: var(--jira-purple-bg); color: var(--jira-purple); }
+    .epic-catalog { background: #deebff; color: #0747a6; }
+    .epic-auth { background: var(--jira-teal-bg); color: var(--jira-teal); }
+    .epic-hold { background: var(--jira-orange-bg); color: #974f00; }
+    .epic-qa { background: var(--jira-green-bg); color: var(--jira-green); }
+
+    .story-points {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #dfe1e6;
+        color: #172b4d;
+        font-size: 11px;
+        font-weight: 700;
+    }
+    .member-avatar-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--jira-navy);
+    }
+    .avatar-circle {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+        .sprint-container {
+            background: #fff;
+            border: 1px solid var(--jira-border);
+            border-radius: 4px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .sprint-header {
+            background: #fafbfc;
+            border-bottom: 1px solid var(--jira-border);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .sprint-title { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .sprint-meta { font-size: 12px; color: var(--jira-subtle); display: flex; align-items: center; gap: 14px; }
+        .sprint-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .sprint-table th, .sprint-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--jira-border); }
+        .sprint-table th { background: #fafbfc; color: var(--jira-subtle); font-weight: 600; font-size: 11px; text-transform: uppercase; }
+        .sprint-table tr:last-child td { border-bottom: none; }
+        .sprint-table tr:hover { background: #fafbfc; }
+    </style>
+</head>
+<body>
+    <div class="jira-navbar">
+        <div class="jira-navbar-left">
+            <div class="jira-brand">Jira Software</div>
+            <a class="jira-nav-link active">Projects</a>
+            <a class="jira-nav-link">Filters</a>
+            <a class="jira-nav-link">Dashboards</a>
+        </div>
+        <div class="jira-navbar-right">
+            <input class="jira-search-bar" placeholder="Filter sprint backlogs..." value="project = DCLRG">
+            <div class="user-avatar">DV</div>
+        </div>
+    </div>
+
+    <div class="project-subheader">
+        <div>
+            <div class="breadcrumbs"><a href="#">Projects</a> / <a href="#">DCLRG</a> / Sprint Planning</div>
+            <div class="project-title">
+                Digital Campus Library Reservation Gateway
+                <span class="project-badge">SPRINT BACKLOGS</span>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button class="jira-btn">Sprint Report</button>
+            <button class="jira-btn jira-btn-primary">Velocity Chart</button>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <div class="sidebar">
+            <div class="sidebar-section-title">Sprint Navigation</div>
+            <a class="sidebar-item">Sprint 1 (Closed)</a>
+            <a class="sidebar-item">Sprint 2 (Closed)</a>
+            <a class="sidebar-item">Sprint 3 (Completed)</a>
+            <a class="sidebar-item active">All Sprints View</a>
+        </div>
+
+        <div class="main-content">
+            <!-- SPRINT 1 CONTAINER -->
+            <div class="sprint-container">
+                <div class="sprint-header">
+                    <div>
+                        <div class="sprint-title">
+                            <span>Sprint 1: Core Search & Authentication Foundation</span>
+                            <span class="lozenge lozenge-done">CLOSED</span>
+                        </div>
+                        <div class="sprint-meta">
+                            <span><strong>Timeline:</strong> 19 Oct 2026 &ndash; 23 Oct 2026</span>
+                            <span><strong>Goal:</strong> Catalog search by title/author/ISBN, query sanitization, OpenID SSO, database schema, responsive UI, baseline tests</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 14px; font-weight: 700; color: var(--jira-navy);">24 Story Points</span>
+                        <div style="font-size: 11px; color: var(--jira-green); font-weight: 600;">6 / 6 Issues Delivered</div>
+                    </div>
+                </div>
+                <table class="sprint-table">
+                    <thead>
+                        <tr><th>Key</th><th>User Story Summary</th><th>Parent Epic</th><th>Assignee & SRN</th><th>Points</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>DCLRG-9</strong></td><td>[Dhruv Talavat - PES1UG24AM087] LRG-101: Relational SQLite Schema & Initial Seed Data</td><td><span class="epic-pill epic-qa">Automated QA</span></td><td>Dhruv Talavat (PES1UG24AM087)</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-10</strong></td><td>[Divyansh - PES1UG24AM094] LRG-102: Catalog Search by Title, Author, ISBN</td><td><span class="epic-pill epic-catalog">Catalog Search</span></td><td>Divyansh (PES1UG24AM094)</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-11</strong></td><td>[Divyansh - PES1UG24AM094] LRG-103: Search Input Validation & Sanitization</td><td><span class="epic-pill epic-catalog">Catalog Search</span></td><td>Divyansh (PES1UG24AM094)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-12</strong></td><td>[Dhareen G - PES1UG24AM084] LRG-104: Campus SSO Authentication & Session Engine</td><td><span class="epic-pill epic-auth">SSO Auth</span></td><td>Dhareen G (PES1UG24AM084)</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-13</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-105: Responsive Catalog Search Web UI</td><td><span class="epic-pill epic-catalog">Catalog Search</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-14</strong></td><td>[Dhareen G - PES1UG24AM084] LRG-106: Baseline Unit Tests for Search & Authentication</td><td><span class="epic-pill epic-qa">Automated QA</span></td><td>Dhareen G (PES1UG24AM084)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SPRINT 2 CONTAINER -->
+            <div class="sprint-container">
+                <div class="sprint-header">
+                    <div>
+                        <div class="sprint-title">
+                            <span>Sprint 2: Hold Lifecycle & Administration</span>
+                            <span class="lozenge lozenge-done">CLOSED</span>
+                        </div>
+                        <div class="sprint-meta">
+                            <span><strong>Timeline:</strong> 26 Oct 2026 &ndash; 30 Oct 2026</span>
+                            <span><strong>Goal:</strong> Hold placement, cancellation, queue progression, librarian returns, hold demand report</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 14px; font-weight: 700; color: var(--jira-navy);">24 Story Points</span>
+                        <div style="font-size: 11px; color: var(--jira-green); font-weight: 600;">6 / 6 Issues Delivered</div>
+                    </div>
+                </div>
+                <table class="sprint-table">
+                    <thead>
+                        <tr><th>Key</th><th>User Story Summary</th><th>Parent Epic</th><th>Assignee & SRN</th><th>Points</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>DCLRG-15</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-201: Place Hold on Checked-Out Book</td><td><span class="epic-pill epic-hold">Hold Engine</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-16</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-202: Prevent Duplicate & Available Holds</td><td><span class="epic-pill epic-hold">Hold Engine</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-17</strong></td><td>[Divyansh - PES1UG24AM094] LRG-203: View & Cancel Active Holds</td><td><span class="epic-pill epic-hold">Hold Engine</span></td><td>Divyansh (PES1UG24AM094)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-18</strong></td><td>[Dhruv Talavat - PES1UG24AM087] LRG-204: Dynamic FIFO Queue Position Progression</td><td><span class="epic-pill epic-hold">Hold Engine</span></td><td>Dhruv Talavat (PES1UG24AM087)</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-19</strong></td><td>[Dhareen G - PES1UG24AM084] LRG-205: Return Title & Hold Promotion to Ready</td><td><span class="epic-pill epic-hold">Hold Engine</span></td><td>Dhareen G (PES1UG24AM084)</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-20</strong></td><td>[Divyansh - PES1UG24AM094] LRG-206: Hold Demand Report for Librarian</td><td><span class="epic-pill epic-hold">Hold Engine</span></td><td>Divyansh (PES1UG24AM094)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SPRINT 3 CONTAINER -->
+            <div class="sprint-container">
+                <div class="sprint-header">
+                    <div>
+                        <div class="sprint-title">
+                            <span>Sprint 3: Spill-Overs, UC-04 Fine Settlement & Test Reporting</span>
+                            <span class="lozenge lozenge-done">100% COMPLETED</span>
+                        </div>
+                        <div class="sprint-meta">
+                            <span><strong>Timeline:</strong> 02 Nov 2026 &ndash; 06 Nov 2026</span>
+                            <span><strong>Goal:</strong> UC-04 overdue fine calculation, Campus Wallet/UPI settlement, 72h auto-expire cascade, rate limiting, CI/CD pipeline, and all 4 test reports</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-size: 14px; font-weight: 700; color: var(--jira-navy);">42 Story Points</span>
+                        <div style="font-size: 11px; color: var(--jira-green); font-weight: 600;">14 / 14 Issues Delivered</div>
+                    </div>
+                </div>
+                <table class="sprint-table">
+                    <thead>
+                        <tr><th>Key</th><th>User Story Summary</th><th>Parent Epic</th><th>Assignee & SRN</th><th>Points</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>DCLRG-2</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-001: View Outstanding Fine Balance & Itemized Breakdown</td><td><span class="epic-pill epic-fine">Fine Payment</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-3</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-002: Select Fine Payment Settlement Method</td><td><span class="epic-pill epic-fine">Fine Payment</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">2</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-4</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-003: Process Overdue Fine Settlement Transaction</td><td><span class="epic-pill epic-fine">Fine Payment</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-5</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-004: Issue Cryptographic Payment Receipt (SHA-256)</td><td><span class="epic-pill epic-fine">Fine Payment</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-6</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-005: Handle Declined & Insufficient Fund Payments</td><td><span class="epic-pill epic-fine">Fine Payment</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-7</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-006: Atomic Rollback & Balance Preservation on Failure</td><td><span class="epic-pill epic-fine">Fine Payment</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-8</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-301: UC-04 Overdue Fine Assessment & Balance Engine</td><td><span class="epic-pill epic-fine">Fine Payment</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-21</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-302: UC-04 Campus Wallet / UPI Settlement & Digital Receipt</td><td><span class="epic-pill epic-fine">Fine Payment</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-22</strong></td><td>[Dharshini V - PES1UG24AM428] LRG-303: UC-04 Hold Restriction when Unpaid Fines >= $20</td><td><span class="epic-pill epic-fine">Fine Payment</span></td><td>Dharshini V (PES1UG24AM428)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-23</strong></td><td>[Dhruv Talavat - PES1UG24AM087] LRG-304: 72-Hour Ready Hold Auto-Expiration & Cascade Promotion</td><td><span class="epic-pill epic-hold">Hold Engine</span></td><td>Dhruv Talavat (PES1UG24AM087)</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-24</strong></td><td>[Divyansh - PES1UG24AM094] LRG-305: Notification Retry Engine & Failure Audit Logging</td><td><span class="epic-pill epic-qa">Automated QA</span></td><td>Divyansh (PES1UG24AM094)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-25</strong></td><td>[Dhruv Talavat - PES1UG24AM087] LRG-306: Sliding-Window Rate Limiter & Cookie Security</td><td><span class="epic-pill epic-auth">SSO Auth</span></td><td>Dhruv Talavat (PES1UG24AM087)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-26</strong></td><td>[Dhareen G - PES1UG24AM084] LRG-307: Automated GitHub Actions CI/CD Pipeline (ci.yml)</td><td><span class="epic-pill epic-qa">Automated QA</span></td><td>Dhareen G (PES1UG24AM084)</td><td><span class="story-points">3</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                        <tr><td><strong>DCLRG-27</strong></td><td>[Dhareen G & Dharshini V] LRG-308: Execute Full Test Plan & Generate 4 Mandatory Test Reports</td><td><span class="epic-pill epic-qa">Automated QA</span></td><td>Dhareen G & Dharshini V</td><td><span class="story-points">5</span></td><td><span class="lozenge lozenge-done">DONE</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
