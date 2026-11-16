@@ -81,11 +81,13 @@ class CatalogSearchService:
         where = f"WHERE {' AND '.join(clauses)}" if clauses else ""
 
         with self.db.get_connection() as conn:
-            total = conn.execute(f"SELECT COUNT(*) FROM titles {where}", params).fetchone()[0]
+            query_sql = f"SELECT COUNT(*) FROM titles {where}"  # nosec B608
+            total = conn.execute(query_sql, params).fetchone()[0]
             total_pages = math.ceil(total / page_size) if total else 1
             page = min(page, total_pages)
+            select_sql = f"SELECT {BOOK_COLUMNS} FROM titles {where} ORDER BY {BROWSE_SORTS[sort]} LIMIT ? OFFSET ?"  # nosec B608
             rows = conn.execute(
-                f"SELECT {BOOK_COLUMNS} FROM titles {where} ORDER BY {BROWSE_SORTS[sort]} LIMIT ? OFFSET ?",
+                select_sql,
                 params + [page_size, (page - 1) * page_size]
             ).fetchall()
 

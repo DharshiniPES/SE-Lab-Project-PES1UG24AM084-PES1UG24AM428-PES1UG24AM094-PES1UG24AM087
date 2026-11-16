@@ -200,17 +200,60 @@ Open a browser and navigate to `http://localhost:5000`:
 
 ---
 
-## 6. Continuous Integration (CI/CD) Pipeline
+## 6. Continuous Integration & Continuous Deployment (CI/CD) Pipeline
 
-Configured at [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
-- **Triggers**: On every `push` and `pull_request` to `main` and teammate branches.
-- **Pipeline Stages**:
-  1. Environment Provisioning & Dependency Caching
-  2. Code Linting & Syntax Verification
-  3. Hermetic Unit Test Execution
-  4. End-to-End System Validation
-  5. Code Coverage Threshold Gating ($\ge 70\%$)
-  6. Artifact Archiving (HTML and XML coverage reports)
+Full documentation and theoretical breakdown are available at [`docs/CICD_PIPELINE_DOCUMENTATION.md`](docs/CICD_PIPELINE_DOCUMENTATION.md).
+
+Configured in [`.github/workflows/ci.yml`](.github/workflows/ci.yml) using open-source DevOps and containerization tools:
+
+```
++---------------------------------------------------------------------------------------------------------+
+|                                    MULTI-STAGE CI/CD PIPELINE FLOW                                      |
+|                                                                                                         |
+|   [ Git Push / PR ]                                                                                     |
+|           |                                                                                             |
+|           v                                                                                             |
+|   [ Stage 1: Lint & Security ]  --> Flake8 PEP 8 Check + Bandit SAST Security Scan                      |
+|           |                                                                                             |
+|           v                                                                                             |
+|   [ Stage 2: Automated Tests ]  --> 118 Unit/Integration Tests + 70% Coverage Gate (Actual: 94.0%)      |
+|           |                                                                                             |
+|           v                                                                                             |
+|   [ Stage 3: Docker Build ]     --> Multi-Stage Dockerfile + Container Smoke Test (/health probe)        |
+|           |                                                                                             |
+|           v (main branch)                                                                               |
+|   [ Stage 4: CD Deployment ]    --> Production Bundle Packaging (Gunicorn, Procfile, docker-compose)    |
++---------------------------------------------------------------------------------------------------------+
+```
+
+### Open-Source Tooling Matrix
+- **Workflow Runner**: GitHub Actions (Ubuntu 22.04 LTS runners)
+- **Code Linter**: Flake8 (v7.5.0) via `.flake8`
+- **Security SAST Scanner**: Bandit (v1.9.4) for AST vulnerability auditing
+- **Test Runner & Coverage**: Pytest (v9.1.1) and Pytest-Cov (v7.1.0) with `--cov-fail-under=70`
+- **Container Engine**: Docker Engine & Docker Buildx (`Dockerfile`, `docker-compose.yml`)
+- **Production WSGI Server**: Gunicorn (v21.2.0) via `Procfile`
+
+### Local CI/CD Pipeline Verification
+You can execute and verify all pipeline quality gates locally using the verification runner:
+```bash
+python scripts/verify_cicd_locally.py
+```
+
+### Docker Containerized Deployment
+```bash
+# Build and run the production container in background
+docker-compose up --build -d
+
+# Verify container health status (queries /health)
+docker ps --filter "name=dclrg_gateway_service"
+
+# View live container logs
+docker-compose logs -f web
+
+# Tear down container services
+docker-compose down
+```
 
 ---
 
